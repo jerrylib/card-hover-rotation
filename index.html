@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    body {
+      background-color: darkgoldenrod;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    #img {
+      cursor: pointer;
+      display: block;
+    }
+    .card {
+      position: relative;
+      display: inline-block;
+    }
+    .card:hover #img {
+      outline: 6px solid lightblue;
+      outline-offset: -6px;
+      border-radius: 10px;
+      transform: perspective(500px) rotateX(var(--rx, 0deg))
+        rotateY(var(--ry, 0deg));
+    }
+  </style>
+  <body>
+    <div class="card">
+      <img id="img" src="./demo.webp" alt="" />
+    </div>
+  </body>
+  <script>
+    const range = [-10, 10];
+    function getCurrentDegrees(range, mousePosition, maxOffset) {
+      const value =
+        ((range[1] - range[0]) / maxOffset) * mousePosition + range[0];
+      return value;
+    }
+    const dom = document.getElementById("img");
+    dom.onmousemove = function (e) {
+      const { offsetX, offsetY } = e;
+      const { width, height } = dom.getBoundingClientRect();
+      e.target.style.setProperty(
+        "--rx",
+        `${getCurrentDegrees(range, offsetY, height)}deg`,
+      );
+      e.target.style.setProperty(
+        "--ry",
+        `${getCurrentDegrees(range, offsetX, width)}deg`,
+      );
+    };
+    dom.onmouseleave = function (e) {
+      dom.style.setProperty("--rx", "0deg");
+      dom.style.setProperty("--ry", "0deg");
+    };
+  </script>
+</html>
